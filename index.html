@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto Master - Retro Edition</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #8B4513;
+      --secondary-color: #CD853F;
+      --background-light: #D2691E;
+      --background-dark: #2d1810;
+      --text-light: #FFE4C4;
+      --text-dark: #FFD700;
+      --card-light: #BC8F8F;
+      --card-dark: #3d2318;
+      --shadow: 0 8px 30px rgba(139, 69, 19, 0.3);
+      --gradient-primary: linear-gradient(45deg, #8B4513, #A0522D);
+      --gradient-secondary: linear-gradient(45deg, #CD853F, #DEB887);
+      --input-bg-light: #F4A460;
+      --input-bg-dark: #4a2c1c;
+      --button-hover: #D2691E;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: url('image.png') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: transparent;
+      transition: background-color 0.3s ease;
+    }
+
+    body.dark-theme::before {
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px;
+    }
+
+    .card {
+      background: rgba(188, 143, 143, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 8px;
+      border: 3px solid #8B4513;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      transform: translateY(0);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: float 6s ease-in-out infinite;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .dark-theme .card {
+      background: var(--card-dark);
+      border-color: #FFD700;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+      color: var(--text-dark);
+    }
+
+    .card-header h1 {
+      color: var(--text-light);
+      font-family: 'Courier New', monospace;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .dark-theme .card-header h1 {
+      color: var(--text-dark);
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    textarea {
+      background: var(--input-bg-light);
+      border: 2px solid #8B4513;
+      color: #4a2c1c;
+      font-family: 'Courier New', monospace;
+      border-radius: 4px;
+    }
+
+    .dark-theme textarea {
+      background: var(--input-bg-dark);
+      border-color: #FFD700;
+      color: #FFD700;
+    }
+
+    select {
+      background: var(--input-bg-light);
+      border: 2px solid #8B4513;
+      color: #4a2c1c;
+      font-family: 'Courier New', monospace;
+      border-radius: 4px;
+    }
+
+    .dark-theme select {
+      background: var(--input-bg-dark);
+      border-color: #FFD700;
+      color: #FFD700;
+    }
+
+    .primary-btn, .secondary-btn {
+      background: var(--gradient-primary);
+      color: var(--text-light);
+      border: 2px solid #8B4513;
+      font-family: 'Courier New', monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .dark-theme .primary-btn,
+    .dark-theme .secondary-btn {
+      border-color: #FFD700;
+      color: #FFD700;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+
+    .history-item {
+      background: rgba(139, 69, 19, 0.2);
+      border: 2px solid #8B4513;
+      border-radius: 4px;
+    }
+
+    .dark-theme .history-item {
+      background: rgba(255, 215, 0, 0.1);
+      border-color: #FFD700;
+      color: #FFD700;
+    }
+
+    .theme-button {
+      color: #8B4513;
+    }
+
+    .dark-theme .theme-button {
+      color: #FFD700;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+
+    #shift-control {
+      color: var(--text-light);
+      font-family: 'Courier New', monospace;
+    }
+
+    .dark-theme #shift-control {
+      color: var(--text-dark);
+    }
+
+    input[type="range"] {
+      accent-color: #8B4513;
+    }
+
+    .dark-theme input[type="range"] {
+      accent-color: #FFD700;
+    }
+
+    .char-counter {
+      color: var(--text-light);
+      font-family: 'Courier New', monospace;
+    }
+
+    .dark-theme .char-counter {
+      color: var(--text-dark);
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(-100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 5px rgba(108, 99, 255, 0.2); }
+      50% { box-shadow: 0 0 20px rgba(108, 99, 255, 0.6); }
+      100% { box-shadow: 0 0 5px rgba(108, 99, 255, 0.2); }
+    }
+
+    .shake {
+      animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    .history-item {
+      transform-origin: left;
+      animation: slideIn 0.5s ease forwards;
+      background: rgba(108, 99, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .history-item:hover {
+      transform: translateX(10px) scale(1.02);
+      background: rgba(108, 99, 255, 0.2);
+    }
+ 
+</body>
+</html>
