@@ -41,6 +41,7 @@
       padding: 20px;
       position: relative;
     }
+    max-width: 1200px;
 
     body::before {
       content: '';
@@ -260,6 +261,208 @@
       transform: translateX(10px) scale(1.02);
       background: rgba(108, 99, 255, 0.2);
     }
- 
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h1><i class="fas fa-lock"></i> Crypto Master</h1>
+        <div class="theme-toggle">
+          <button id="light-mode" class="theme-button">
+            <i class="fas fa-sun"></i>
+          </button>
+          <button id="dark-mode" class="theme-button">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="input-section">
+        <textarea id="input-text" placeholder="Enter your secret message..." maxlength="500"></textarea>
+        <div class="char-counter">0/500</div>
+        
+        <div class="controls">
+          <select id="encryption-method">
+            <option value="caesar">Caesar Cipher</option>
+            <option value="base64">Base64</option>
+            <option value="rot13">ROT13</option>
+          </select>
+          
+          <div id="shift-control">
+            <label>Shift Amount: <span id="shift-display">3</span></label>
+            <input type="range" id="shift-value" min="1" max="25" value="3">
+          </div>
+          
+          <button id="encrypt-btn" class="primary-btn">
+            <i class="fas fa-lock"></i> Encrypt
+          </button>
+          <button id="decrypt-btn" class="secondary-btn">
+            <i class="fas fa-lock-open"></i> Decrypt
+          </button>
+        </div>
+      </div>
+
+      <div class="output-section">
+        <textarea id="output-text" placeholder="Result will appear here..." readonly></textarea>
+        <button id="copy-btn" class="primary-btn">
+          <i class="fas fa-copy"></i> Copy
+        </button>
+      </div>
+
+      <div class="history-section">
+        <h3><i class="fas fa-history"></i> Recent Activity</h3>
+        <div id="history-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize elements
+      const inputText = document.getElementById('input-text');
+      const outputText = document.getElementById('output-text');
+      const encryptBtn = document.getElementById('encrypt-btn');
+      const decryptBtn = document.getElementById('decrypt-btn');
+      const copyBtn = document.getElementById('copy-btn');
+      const methodSelect = document.getElementById('encryption-method');
+      const shiftValue = document.getElementById('shift-value');
+      const shiftDisplay = document.getElementById('shift-display');
+      const historyList = document.getElementById('history-list');
+
+      // Theme switching
+      document.getElementById('light-mode').addEventListener('click', () => {
+        document.body.classList.remove('dark-theme');
+        localStorage.setItem('theme', 'light');
+      });
+
+      document.getElementById('dark-mode').addEventListener('click', () => {
+        document.body.classList.add('dark-theme');
+        localStorage.setItem('theme', 'dark');
+      });
+
+      // Load saved theme
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-theme');
+      }
+
+      // Character counter
+      inputText.addEventListener('input', (e) => {
+        const counter = document.querySelector('.char-counter');
+        const count = e.target.value.length;
+        counter.textContent = `${count}/500`;
+      });
+
+      // Method selection handling
+      methodSelect.addEventListener('change', () => {
+        const shiftControl = document.getElementById('shift-control');
+        shiftControl.style.display = methodSelect.value === 'caesar' ? 'flex' : 'none';
+      });
+
+      // Shift value display
+      shiftValue.addEventListener('input', (e) => {
+        shiftDisplay.textContent = e.target.value;
+      });
+
+      // Encryption function
+      function encrypt(text, method, shift) {
+        switch (method) {
+          case 'caesar':
+            return text.split('').map(char => {
+              if (char.match(/[a-zA-Z]/)) {
+                const code = char.charCodeAt(0);
+                const isUpperCase = code < 91;
+                const base = isUpperCase ? 65 : 97;
+                return String.fromCharCode(
+                  (code - base + parseInt(shift)) % 26 + base
+                );
+              }
+              return char;
+            }).join('');
+          case 'base64':
+            return btoa(text);
+          case 'rot13':
+            return encrypt(text, 'caesar', 13);
+          default:
+            return text;
+        }
+      }
+
+      // Decrypt function
+      function decrypt(text, method, shift) {
+        switch (method) {
+          case 'caesar':
+            return encrypt(text, method, 26 - shift);
+          case 'base64':
+            try {
+              return atob(text);
+            } catch {
+              return 'Invalid Base64 input';
+            }
+          case 'rot13':
+            return encrypt(text, 'caesar', 13);
+          default:
+            return text;
+        }
+      }
+
+      // Button handlers
+      encryptBtn.addEventListener('click', () => {
+        const text = inputText.value;
+        const method = methodSelect.value;
+        const shift = parseInt(shiftValue.value);
+        
+        if (!text) return;
+
+        const result = encrypt(text, method, shift);
+        outputText.value = result;
+        addToHistory(text, result, 'Encrypted');
+      });
+
+      decryptBtn.addEventListener('click', () => {
+        const text = inputText.value;
+        const method = methodSelect.value;
+        const shift = parseInt(shiftValue.value);
+        
+        if (!text) return;
+
+        const result = decrypt(text, method, shift);
+        outputText.value = result;
+        addToHistory(text, result, 'Decrypted');
+      });
+
+      // Copy button handler
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(outputText.value);
+          copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+          setTimeout(() => {
+            copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy:', err);
+        }
+      });
+
+      // History management
+      function addToHistory(input, output, type) {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        const truncatedInput = input.length > 30 ? input.substring(0, 30) + '...' : input;
+        item.innerHTML = `
+          <div class="history-content">
+            <span class="history-type">${type}</span>
+            <span class="history-text">${truncatedInput}</span>
+            <span class="history-time">${new Date().toLocaleTimeString()}</span>
+          </div>
+        `;
+        historyList.insertBefore(item, historyList.firstChild);
+      }
+
+      // Initialize shift control visibility
+      const shiftControl = document.getElementById('shift-control');
+      shiftControl.style.display = methodSelect.value === 'caesar' ? 'flex' : 'none';
+    });
+  </script>
 </body>
 </html>
