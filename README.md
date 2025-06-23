@@ -1,6 +1,13 @@
 # Crypto  Master
 ![landing_page](https://github.com/pragsrv/Text-Encoder-Decoder/blob/63c3d508246e2c72014b5cb6203456e8ba7bd37e/output.gif?raw=true)
 
+---
+> The hover effect on the containers is made using AI(CoPilot)
+
+> The dark mode color settings were done using AI(Claude AI)
+
+> This readme is generated using AI(ChatGPT)
+---
 ## Overview
 The Text Encrypter-Decrypter is a web-based application that allows users to encrypt and decrypt messages using various encryption methods. The application features a user-friendly interface and supports multiple encryption algorithms, including Caesar Cipher, Base64, and ROT13.
 
