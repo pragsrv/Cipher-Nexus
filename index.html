@@ -1,468 +1,1889 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crypto Master - Retro Edition</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <style>
-    :root {
-      --primary-color: #8B4513;
-      --secondary-color: #CD853F;
-      --background-light: #D2691E;
-      --background-dark: #2d1810;
-      --text-light: #FFE4C4;
-      --text-dark: #FFD700;
-      --card-light: #BC8F8F;
-      --card-dark: #3d2318;
-      --shadow: 0 8px 30px rgba(139, 69, 19, 0.3);
-      --gradient-primary: linear-gradient(45deg, #8B4513, #A0522D);
-      --gradient-secondary: linear-gradient(45deg, #CD853F, #DEB887);
-      --input-bg-light: #F4A460;
-      --input-bg-dark: #4a2c1c;
-      --button-hover: #D2691E;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      transition: all 0.3s ease;
-    }
-
-    body {
-      font-family: 'Courier New', monospace;
-      background: url('image.png') no-repeat center center fixed;
-      background-size: cover;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      position: relative;
-    }
-    max-width: 1200px;
-
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: transparent;
-      transition: background-color 0.3s ease;
-    }
-
-    body.dark-theme::before {
-      background: rgba(0, 0, 0, 0.5);
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px;
-    }
-
-    .card {
-      background: rgba(188, 143, 143, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 8px;
-      border: 3px solid #8B4513;
-      padding: 40px;
-      box-shadow: var(--shadow);
-      transform: translateY(0);
-      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      animation: float 6s ease-in-out infinite;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-
-    .dark-theme .card {
-      background: var(--card-dark);
-      border-color: #FFD700;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-      color: var(--text-dark);
-    }
-
-    .card-header h1 {
-      color: var(--text-light);
-      font-family: 'Courier New', monospace;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    .dark-theme .card-header h1 {
-      color: var(--text-dark);
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-    }
-
-    textarea {
-      background: var(--input-bg-light);
-      border: 2px solid #8B4513;
-      color: #4a2c1c;
-      font-family: 'Courier New', monospace;
-      border-radius: 4px;
-    }
-
-    .dark-theme textarea {
-      background: var(--input-bg-dark);
-      border-color: #FFD700;
-      color: #FFD700;
-    }
-
-    select {
-      background: var(--input-bg-light);
-      border: 2px solid #8B4513;
-      color: #4a2c1c;
-      font-family: 'Courier New', monospace;
-      border-radius: 4px;
-    }
-
-    .dark-theme select {
-      background: var(--input-bg-dark);
-      border-color: #FFD700;
-      color: #FFD700;
-    }
-
-    .primary-btn, .secondary-btn {
-      background: var(--gradient-primary);
-      color: var(--text-light);
-      border: 2px solid #8B4513;
-      font-family: 'Courier New', monospace;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .dark-theme .primary-btn,
-    .dark-theme .secondary-btn {
-      border-color: #FFD700;
-      color: #FFD700;
-      text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
-    }
-
-    .history-item {
-      background: rgba(139, 69, 19, 0.2);
-      border: 2px solid #8B4513;
-      border-radius: 4px;
-    }
-
-    .dark-theme .history-item {
-      background: rgba(255, 215, 0, 0.1);
-      border-color: #FFD700;
-      color: #FFD700;
-    }
-
-    .theme-button {
-      color: #8B4513;
-    }
-
-    .dark-theme .theme-button {
-      color: #FFD700;
-      text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
-    }
-
-    #shift-control {
-      color: var(--text-light);
-      font-family: 'Courier New', monospace;
-    }
-
-    .dark-theme #shift-control {
-      color: var(--text-dark);
-    }
-
-    input[type="range"] {
-      accent-color: #8B4513;
-    }
-
-    .dark-theme input[type="range"] {
-      accent-color: #FFD700;
-    }
-
-    .char-counter {
-      color: var(--text-light);
-      font-family: 'Courier New', monospace;
-    }
-
-    .dark-theme .char-counter {
-      color: var(--text-dark);
-    }
-
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        padding: 20px;
-      }
-
-      .card {
-        padding: 20px;
-      }
-
-      .controls {
-        flex-direction: column;
-      }
-
-      button {
-        width: 100%;
-      }
-    }
-
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0px); }
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-      20%, 40%, 60%, 80% { transform: translateX(5px); }
-    }
-
-    @keyframes slideIn {
-      from { transform: translateX(-100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-
-    @keyframes glow {
-      0% { box-shadow: 0 0 5px rgba(108, 99, 255, 0.2); }
-      50% { box-shadow: 0 0 20px rgba(108, 99, 255, 0.6); }
-      100% { box-shadow: 0 0 5px rgba(108, 99, 255, 0.2); }
-    }
-
-    .shake {
-      animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-    }
-
-    .history-item {
-      transform-origin: left;
-      animation: slideIn 0.5s ease forwards;
-      background: rgba(108, 99, 255, 0.1);
-      backdrop-filter: blur(5px);
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      transition: all 0.3s ease;
-    }
-
-    .history-item:hover {
-      transform: translateX(10px) scale(1.02);
-      background: rgba(108, 99, 255, 0.2);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cipher Nexus - Advanced Cryptography Game</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(120, 198, 121, 0.3) 0%, transparent 50%);
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+        
+        @keyframes backgroundShift {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.3; }
+            50% { transform: scale(1.1) rotate(5deg); opacity: 0.6; }
+        }
+        
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .title {
+            font-family: 'Orbitron', monospace;
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            animation: titlePulse 3s ease-in-out infinite;
+            margin-bottom: 10px;
+        }
+        
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #00ffff;
+            opacity: 0.8;
+            letter-spacing: 2px;
+        }
+        
+        .game-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 15px 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .stat-card:hover::before {
+            left: 100%;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00ffff;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #ffffff;
+            opacity: 0.7;
+        }
+        
+        .main-interface {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-interface {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00ffff, #ff00ff, #ffff00, #00ffff);
+            background-size: 300% 100%;
+            animation: borderFlow 3s linear infinite;
+        }
+        
+        @keyframes borderFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+        
+        .panel-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00ffff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-weight: 500;
+        }
+        
+        .text-input {
+            width: 100%;
+            min-height: 120px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+        
+        .text-input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .select-input {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .select-input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        }
+        
+        .number-input {
+            width: 80px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .number-input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #00ffff, #0080ff);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 255, 255, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(45deg, #ff0080, #ff4000);
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, #00ff80, #40ff00);
+        }
+        
+        .tools-panel {
+            grid-column: 1 / -1;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .tool-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+            border-color: #00ffff;
+        }
+        
+        .tool-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .tool-name {
+            font-weight: 600;
+            color: #00ffff;
+            margin-bottom: 5px;
+        }
+        
+        .tool-description {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            line-height: 1.4;
+        }
+        
+        .challenge-mode {
+            background: rgba(255, 0, 128, 0.1);
+            border: 2px solid rgba(255, 0, 128, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .challenge-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            color: #ff0080;
+            margin-bottom: 15px;
+        }
+        
+        .challenge-text {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+        
+        .hint-system {
+            margin-top: 20px;
+        }
+        
+        .hint {
+            background: rgba(255, 255, 0, 0.1);
+            border-left: 4px solid #ffff00;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 10px 10px 0;
+            display: none;
+        }
+        
+        .hint.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffff, #ff00ff);
+            width: 0%;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00ffff;
+            border-radius: 50%;
+            animation: float 10s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 255, 255, 0.9);
+            color: #000;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .easter-egg {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            border-radius: 50%;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+            z-index: 1000;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .modal-content {
+            background: rgba(26, 26, 46, 0.95);
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #ff0080;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .level-indicator {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 10px 20px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            color: #00ffff;
+            z-index: 1000;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="card">
-      <div class="card-header">
-        <h1><i class="fas fa-lock"></i> Crypto Master</h1>
-        <div class="theme-toggle">
-          <button id="light-mode" class="theme-button">
-            <i class="fas fa-sun"></i>
-          </button>
-          <button id="dark-mode" class="theme-button">
-            <i class="fas fa-moon"></i>
-          </button>
-        </div>
-      </div>
-
-      <div class="input-section">
-        <textarea id="input-text" placeholder="Enter your secret message..." maxlength="500"></textarea>
-        <div class="char-counter">0/500</div>
-        
-        <div class="controls">
-          <select id="encryption-method">
-            <option value="caesar">Caesar Cipher</option>
-            <option value="base64">Base64</option>
-            <option value="rot13">ROT13</option>
-          </select>
-          
-          <div id="shift-control">
-            <label>Shift Amount: <span id="shift-display">3</span></label>
-            <input type="range" id="shift-value" min="1" max="25" value="3">
-          </div>
-          
-          <button id="encrypt-btn" class="primary-btn">
-            <i class="fas fa-lock"></i> Encrypt
-          </button>
-          <button id="decrypt-btn" class="secondary-btn">
-            <i class="fas fa-lock-open"></i> Decrypt
-          </button>
-        </div>
-      </div>
-
-      <div class="output-section">
-        <textarea id="output-text" placeholder="Result will appear here..." readonly></textarea>
-        <button id="copy-btn" class="primary-btn">
-          <i class="fas fa-copy"></i> Copy
-        </button>
-      </div>
-
-      <div class="history-section">
-        <h3><i class="fas fa-history"></i> Recent Activity</h3>
-        <div id="history-list"></div>
-      </div>
+    <div class="background-animation"></div>
+    <canvas class="matrix-rain" id="matrixCanvas"></canvas>
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="level-indicator">
+        <div id="levelDisplay">LEVEL: 1 - NOVICE</div>
     </div>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Initialize elements
-      const inputText = document.getElementById('input-text');
-      const outputText = document.getElementById('output-text');
-      const encryptBtn = document.getElementById('encrypt-btn');
-      const decryptBtn = document.getElementById('decrypt-btn');
-      const copyBtn = document.getElementById('copy-btn');
-      const methodSelect = document.getElementById('encryption-method');
-      const shiftValue = document.getElementById('shift-value');
-      const shiftDisplay = document.getElementById('shift-display');
-      const historyList = document.getElementById('history-list');
-
-      // Theme switching
-      document.getElementById('light-mode').addEventListener('click', () => {
-        document.body.classList.remove('dark-theme');
-        localStorage.setItem('theme', 'light');
-      });
-
-      document.getElementById('dark-mode').addEventListener('click', () => {
-        document.body.classList.add('dark-theme');
-        localStorage.setItem('theme', 'dark');
-      });
-
-      // Load saved theme
-      if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-theme');
-      }
-
-      // Character counter
-      inputText.addEventListener('input', (e) => {
-        const counter = document.querySelector('.char-counter');
-        const count = e.target.value.length;
-        counter.textContent = `${count}/500`;
-      });
-
-      // Method selection handling
-      methodSelect.addEventListener('change', () => {
-        const shiftControl = document.getElementById('shift-control');
-        shiftControl.style.display = methodSelect.value === 'caesar' ? 'flex' : 'none';
-      });
-
-      // Shift value display
-      shiftValue.addEventListener('input', (e) => {
-        shiftDisplay.textContent = e.target.value;
-      });
-
-      // Encryption function
-      function encrypt(text, method, shift) {
-        switch (method) {
-          case 'caesar':
-            return text.split('').map(char => {
-              if (char.match(/[a-zA-Z]/)) {
-                const code = char.charCodeAt(0);
-                const isUpperCase = code < 91;
-                const base = isUpperCase ? 65 : 97;
-                return String.fromCharCode(
-                  (code - base + parseInt(shift)) % 26 + base
-                );
-              }
-              return char;
-            }).join('');
-          case 'base64':
-            return btoa(text);
-          case 'rot13':
-            return encrypt(text, 'caesar', 13);
-          default:
-            return text;
-        }
-      }
-
-      // Decrypt function
-      function decrypt(text, method, shift) {
-        switch (method) {
-          case 'caesar':
-            return encrypt(text, method, 26 - shift);
-          case 'base64':
-            try {
-              return atob(text);
-            } catch {
-              return 'Invalid Base64 input';
+    
+    <div class="container">
+        <header class="header">
+            <h1 class="title">CIPHER NEXUS</h1>
+            <p class="subtitle">Advanced Cryptography & Encoding Mastery</p>
+        </header>
+        
+        <div class="game-stats">
+            <div class="stat-card">
+                <div class="stat-value" id="scoreValue">0</div>
+                <div class="stat-label">Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="levelValue">1</div>
+                <div class="stat-label">Level</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="streakValue">0</div>
+                <div class="stat-label">Streak</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="accuracyValue">100%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+        </div>
+        
+        <div class="main-interface">
+            <div class="panel">
+                <h2 class="panel-title">🔐 ENCODER</h2>
+                <div class="input-group">
+                    <label class="input-label">Input Message:</label>
+                    <textarea class="text-input" id="inputText" placeholder="Enter your secret message here..."></textarea>
+                </div>
+                <div class="controls">
+                    <select class="select-input" id="encodeMethod">
+                        <option value="base64">Base64</option>
+                        <option value="caesar">Caesar Cipher</option>
+                        <option value="rot13">ROT13</option>
+                        <option value="binary">Binary</option>
+                        <option value="hex">Hexadecimal</option>
+                        <option value="morse">Morse Code</option>
+                        <option value="atbash">Atbash</option>
+                        <option value="vigenere">Vigenère</option>
+                        <option value="playfair">Playfair</option>
+                        <option value="rail">Rail Fence</option>
+                    </select>
+                    <input type="number" class="number-input" id="shiftValue" value="3" min="1" max="25" title="Shift Value">
+                    <input type="text" class="text-input" id="keyValue" placeholder="Key" style="width: 120px; min-height: auto; height: 40px;" title="Encryption Key">
+                </div>
+                <button class="btn" onclick="encodeText()">🚀 ENCODE</button>
+                <button class="btn btn-danger" onclick="clearInput()">🗑️ CLEAR</button>
+            </div>
+            
+            <div class="panel">
+                <h2 class="panel-title">🔓 DECODER</h2>
+                <div class="input-group">
+                    <label class="input-label">Encoded Message:</label>
+                    <textarea class="text-input" id="outputText" placeholder="Encoded message will appear here..."></textarea>
+                </div>
+                <div class="controls">
+                    <select class="select-input" id="decodeMethod">
+                        <option value="base64">Base64</option>
+                        <option value="caesar">Caesar Cipher</option>
+                        <option value="rot13">ROT13</option>
+                        <option value="binary">Binary</option>
+                        <option value="hex">Hexadecimal</option>
+                        <option value="morse">Morse Code</option>
+                        <option value="atbash">Atbash</option>
+                        <option value="vigenere">Vigenère</option>
+                        <option value="playfair">Playfair</option>
+                        <option value="rail">Rail Fence</option>
+                    </select>
+                    <input type="number" class="number-input" id="decodeShift" value="3" min="1" max="25" title="Shift Value">
+                    <input type="text" class="text-input" id="decodeKey" placeholder="Key" style="width: 120px; min-height: auto; height: 40px;" title="Decryption Key">
+                </div>
+                <button class="btn btn-success" onclick="decodeText()">🔍 DECODE</button>
+                <button class="btn btn-danger" onclick="clearOutput()">🗑️ CLEAR</button>
+            </div>
+        </div>
+        
+        <div class="panel tools-panel">
+            <h2 class="panel-title">🛠️ ADVANCED TOOLS & ANALYZERS</h2>
+            <div class="tools-grid">
+                <div class="tool-card" onclick="analyzeFrequency()">
+                    <span class="tool-icon">📊</span>
+                    <div class="tool-name">Frequency Analysis</div>
+                    <div class="tool-description">Analyze character frequency patterns</div>
+                </div>
+                <div class="tool-card" onclick="bruteForce()">
+                    <span class="tool-icon">🔨</span>
+                    <div class="tool-name">Brute Force Attack</div>
+                    <div class="tool-description">Try all possible combinations</div>
+                </div>
+                <div class="tool-card" onclick="generateKey()">
+                    <span class="tool-icon">🎲</span>
+                    <div class="tool-name">Key Generator</div>
+                    <div class="tool-description">Generate secure random keys</div>
+                </div>
+                <div class="tool-card" onclick="textAnalyzer()">
+                    <span class="tool-icon">🔬</span>
+                    <div class="tool-name">Text Analyzer</div>
+                    <div class="tool-description">Deep text analysis and statistics</div>
+                </div>
+                <div class="tool-card" onclick="hashGenerator()">
+                    <span class="tool-icon">🏷️</span>
+                    <div class="tool-name">Hash Generator</div>
+                    <div class="tool-description">Generate MD5, SHA1, SHA256 hashes</div>
+                </div>
+                <div class="tool-card" onclick="steganography()">
+                    <span class="tool-icon">🖼️</span>
+                    <div class="tool-name">Steganography</div>
+                    <div class="tool-description">Hide messages in plain sight</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="challenge-mode" id="challengeMode">
+            <h2 class="challenge-title">🎯 CHALLENGE MODE</h2>
+            <p>Test your cryptographic skills with randomly generated puzzles!</p>
+            <div class="challenge-text" id="challengeText">Click "New Challenge" to begin...</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="challengeProgress"></div>
+            </div>
+            <button class="btn" onclick="newChallenge()">🎲 NEW CHALLENGE</button>
+            <button class="btn btn-success" onclick="submitChallenge()">✅ SUBMIT ANSWER</button>
+            <button class="btn" onclick="getHint()">💡 HINT</button>
+            
+            <div class="hint-system" id="hintSystem">
+                <div class="hint" id="hint1">💭 Look at the pattern of the encoded text...</div>
+                <div class="hint" id="hint2">🔍 Try counting character frequencies...</div>
+                <div class="hint" id="hint3">🎯 Consider the length and structure...</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    <div class="easter-egg" onclick="activateEasterEgg()"></div>
+    
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Game State
+        let gameState = {
+            score: 0,
+            level: 1,
+            streak: 0,
+            totalAttempts: 0,
+            correctAttempts: 0,
+            currentChallenge: null,
+            hintsUsed: 0
+        };
+        
+        // Initialize game
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeParticles();
+            initializeMatrixRain();
+            updateStats();
+            loadSavedState();
+        });
+        
+        // Particle system
+        function initializeParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                createParticle(particlesContainer);
             }
-          case 'rot13':
-            return encrypt(text, 'caesar', 13);
-          default:
-            return text;
         }
-      }
-
-      // Button handlers
-      encryptBtn.addEventListener('click', () => {
-        const text = inputText.value;
-        const method = methodSelect.value;
-        const shift = parseInt(shiftValue.value);
         
-        if (!text) return;
-
-        const result = encrypt(text, method, shift);
-        outputText.value = result;
-        addToHistory(text, result, 'Encrypted');
-      });
-
-      decryptBtn.addEventListener('click', () => {
-        const text = inputText.value;
-        const method = methodSelect.value;
-        const shift = parseInt(shiftValue.value);
-        
-        if (!text) return;
-
-        const result = decrypt(text, method, shift);
-        outputText.value = result;
-        addToHistory(text, result, 'Decrypted');
-      });
-
-      // Copy button handler
-      copyBtn.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(outputText.value);
-          copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-          setTimeout(() => {
-            copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
-          }, 2000);
-        } catch (err) {
-          console.error('Failed to copy:', err);
+        function createParticle(container) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDelay = Math.random() * 10 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            container.appendChild(particle);
+            
+            // Remove and recreate particle after animation
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                    createParticle(container);
+                }
+            }, 20000);
         }
-      });
-
-      // History management
-      function addToHistory(input, output, type) {
-        const item = document.createElement('div');
-        item.className = 'history-item';
-        const truncatedInput = input.length > 30 ? input.substring(0, 30) + '...' : input;
-        item.innerHTML = `
-          <div class="history-content">
-            <span class="history-type">${type}</span>
-            <span class="history-text">${truncatedInput}</span>
-            <span class="history-time">${new Date().toLocaleTimeString()}</span>
-          </div>
-        `;
-        historyList.insertBefore(item, historyList.firstChild);
-      }
-
-      // Initialize shift control visibility
-      const shiftControl = document.getElementById('shift-control');
-      shiftControl.style.display = methodSelect.value === 'caesar' ? 'flex' : 'none';
-    });
-  </script>
+        
+        // Matrix rain effect
+        function initializeMatrixRain() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
+            const matrixArray = matrix.split("");
+            
+            const fontSize = 10;
+            const columns = canvas.width / fontSize;
+            const drops = [];
+            
+            for (let x = 0; x < columns; x++) {
+                drops[x] = 1;
+            }
+            
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#0F3';
+                ctx.font = fontSize + 'px monospace';
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            
+            setInterval(draw, 35);
+            
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+        
+        // Encoding functions
+        function encodeText() {
+            const input = document.getElementById('inputText').value;
+            const method = document.getElementById('encodeMethod').value;
+            const shift = parseInt(document.getElementById('shiftValue').value) || 3;
+            const key = document.getElementById('keyValue').value || 'KEY';
+            
+            if (!input.trim()) {
+                showNotification('Please enter some text to encode!', 'error');
+                return;
+            }
+            
+            let result = '';
+            
+            try {
+                switch (method) {
+                    case 'base64':
+                        result = btoa(input);
+                        break;
+                    case 'caesar':
+                        result = caesarCipher(input, shift);
+                        break;
+                    case 'rot13':
+                        result = rot13(input);
+                        break;
+                    case 'binary':
+                        result = textToBinary(input);
+                        break;
+                    case 'hex':
+                        result = textToHex(input);
+                        break;
+                    case 'morse':
+                        result = textToMorse(input);
+                        break;
+                    case 'atbash':
+                        result = atbashCipher(input);
+                        break;
+                    case 'vigenere':
+                        result = vigenereCipher(input, key);
+                        break;
+                    case 'playfair':
+                        result = playfairCipher(input, key);
+                        break;
+                    case 'rail':
+                        result = railFenceCipher(input, shift);
+                        break;
+                    default:
+                        result = input;
+                }
+                
+                document.getElementById('outputText').value = result;
+                updateScore(10);
+                showNotification('Text encoded successfully!', 'success');
+                
+            } catch (error) {
+                showNotification('Encoding error: ' + error.message, 'error');
+            }
+        }
+        
+        function decodeText() {
+            const input = document.getElementById('outputText').value;
+            const method = document.getElementById('decodeMethod').value;
+            const shift = parseInt(document.getElementById('decodeShift').value) || 3;
+            const key = document.getElementById('decodeKey').value || 'KEY';
+            
+            if (!input.trim()) {
+                showNotification('Please enter some text to decode!', 'error');
+                return;
+            }
+            
+            let result = '';
+            
+            try {
+                switch (method) {
+                    case 'base64':
+                        result = atob(input);
+                        break;
+                    case 'caesar':
+                        result = caesarCipher(input, -shift);
+                        break;
+                    case 'rot13':
+                        result = rot13(input);
+                        break;
+                    case 'binary':
+                        result = binaryToText(input);
+                        break;
+                    case 'hex':
+                        result = hexToText(input);
+                        break;
+                    case 'morse':
+                        result = morseToText(input);
+                        break;
+                    case 'atbash':
+                        result = atbashCipher(input);
+                        break;
+                    case 'vigenere':
+                        result = vigenereDecipher(input, key);
+                        break;
+                    case 'playfair':
+                        result = playfairDecipher(input, key);
+                        break;
+                    case 'rail':
+                        result = railFenceDecipher(input, shift);
+                        break;
+                    default:
+                        result = input;
+                }
+                
+                document.getElementById('inputText').value = result;
+                updateScore(15);
+                showNotification('Text decoded successfully!', 'success');
+                
+            } catch (error) {
+                showNotification('Decoding error: ' + error.message, 'error');
+            }
+        }
+        
+        // Cipher implementations
+        function caesarCipher(text, shift) {
+            return text.replace(/[a-zA-Z]/g, function(char) {
+                const start = char <= 'Z' ? 65 : 97;
+                return String.fromCharCode(((char.charCodeAt(0) - start + shift + 26) % 26) + start);
+            });
+        }
+        
+        function rot13(text) {
+            return caesarCipher(text, 13);
+        }
+        
+        function textToBinary(text) {
+            return text.split('').map(char => 
+                char.charCodeAt(0).toString(2).padStart(8, '0')
+            ).join(' ');
+        }
+        
+        function binaryToText(binary) {
+            return binary.split(' ').map(bin => 
+                String.fromCharCode(parseInt(bin, 2))
+            ).join('');
+        }
+        
+        function textToHex(text) {
+            return text.split('').map(char => 
+                char.charCodeAt(0).toString(16).padStart(2, '0')
+            ).join(' ');
+        }
+        
+        function hexToText(hex) {
+            return hex.split(' ').map(h => 
+                String.fromCharCode(parseInt(h, 16))
+            ).join('');
+        }
+        
+        const morseCode = {
+            'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+            'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+            'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+            'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+            'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---',
+            '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...',
+            '8': '---..', '9': '----.', ' ': '/'
+        };
+        
+        function textToMorse(text) {
+            return text.toUpperCase().split('').map(char => 
+                morseCode[char] || char
+            ).join(' ');
+        }
+        
+        function morseToText(morse) {
+            const reverseMorse = Object.fromEntries(
+                Object.entries(morseCode).map(([k, v]) => [v, k])
+            );
+            return morse.split(' ').map(code => 
+                reverseMorse[code] || code
+            ).join('');
+        }
+        
+        function atbashCipher(text) {
+            return text.replace(/[a-zA-Z]/g, function(char) {
+                if (char <= 'Z') {
+                    return String.fromCharCode(90 - (char.charCodeAt(0) - 65));
+                } else {
+                    return String.fromCharCode(122 - (char.charCodeAt(0) - 97));
+                }
+            });
+        }
+        
+        function vigenereCipher(text, key) {
+            key = key.toUpperCase();
+            let result = '';
+            let keyIndex = 0;
+            
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (char.match(/[a-zA-Z]/)) {
+                    const isUpper = char <= 'Z';
+                    const charCode = char.toUpperCase().charCodeAt(0) - 65;
+                    const keyChar = key[keyIndex % key.length].charCodeAt(0) - 65;
+                    const encoded = (charCode + keyChar) % 26;
+                    result += String.fromCharCode(encoded + 65);
+                    if (!isUpper) result = result.slice(0, -1) + result.slice(-1).toLowerCase();
+                    keyIndex++;
+                } else {
+                    result += char;
+                }
+            }
+            return result;
+        }
+        
+        function vigenereDecipher(text, key) {
+            key = key.toUpperCase();
+            let result = '';
+            let keyIndex = 0;
+            
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (char.match(/[a-zA-Z]/)) {
+                    const isUpper = char <= 'Z';
+                    const charCode = char.toUpperCase().charCodeAt(0) - 65;
+                    const keyChar = key[keyIndex % key.length].charCodeAt(0) - 65;
+                    const decoded = (charCode - keyChar + 26) % 26;
+                    result += String.fromCharCode(decoded + 65);
+                    if (!isUpper) result = result.slice(0, -1) + result.slice(-1).toLowerCase();
+                    keyIndex++;
+                } else {
+                    result += char;
+                }
+            }
+            return result;
+        }
+        
+        function playfairCipher(text, key) {
+            // Simplified Playfair implementation
+            const alphabet = 'ABCDEFGHIKLMNOPQRSTUVWXYZ'; // J merged with I
+            key = key.toUpperCase().replace(/J/g, 'I');
+            const keySquare = createPlayfairSquare(key, alphabet);
+            
+            text = text.toUpperCase().replace(/J/g, 'I').replace(/[^A-Z]/g, '');
+            if (text.length % 2) text += 'X';
+            
+            let result = '';
+            for (let i = 0; i < text.length; i += 2) {
+                const pair = text.substr(i, 2);
+                result += encodePlayfairPair(pair, keySquare);
+            }
+            return result;
+        }
+        
+        function playfairDecipher(text, key) {
+            const alphabet = 'ABCDEFGHIKLMNOPQRSTUVWXYZ';
+            key = key.toUpperCase().replace(/J/g, 'I');
+            const keySquare = createPlayfairSquare(key, alphabet);
+            
+            text = text.toUpperCase().replace(/[^A-Z]/g, '');
+            let result = '';
+            for (let i = 0; i < text.length; i += 2) {
+                const pair = text.substr(i, 2);
+                result += decodePlayfairPair(pair, keySquare);
+            }
+            return result;
+        }
+        
+        function createPlayfairSquare(key, alphabet) {
+            const used = new Set();
+            let square = '';
+            
+            // Add key characters first
+            for (const char of key) {
+                if (!used.has(char) && alphabet.includes(char)) {
+                    square += char;
+                    used.add(char);
+                }
+            }
+            
+            // Add remaining alphabet
+            for (const char of alphabet) {
+                if (!used.has(char)) {
+                    square += char;
+                }
+            }
+            
+            return square;
+        }
+        
+        function encodePlayfairPair(pair, keySquare) {
+            const pos1 = keySquare.indexOf(pair[0]);
+            const pos2 = keySquare.indexOf(pair[1]);
+            const row1 = Math.floor(pos1 / 5);
+            const col1 = pos1 % 5;
+            const row2 = Math.floor(pos2 / 5);
+            const col2 = pos2 % 5;
+            
+            if (row1 === row2) {
+                // Same row
+                return keySquare[(row1 * 5) + ((col1 + 1) % 5)] + 
+                       keySquare[(row2 * 5) + ((col2 + 1) % 5)];
+            } else if (col1 === col2) {
+                // Same column
+                return keySquare[((row1 + 1) % 5) * 5 + col1] + 
+                       keySquare[((row2 + 1) % 5) * 5 + col2];
+            } else {
+                // Rectangle
+                return keySquare[row1 * 5 + col2] + keySquare[row2 * 5 + col1];
+            }
+        }
+        
+        function decodePlayfairPair(pair, keySquare) {
+            const pos1 = keySquare.indexOf(pair[0]);
+            const pos2 = keySquare.indexOf(pair[1]);
+            const row1 = Math.floor(pos1 / 5);
+            const col1 = pos1 % 5;
+            const row2 = Math.floor(pos2 / 5);
+            const col2 = pos2 % 5;
+            
+            if (row1 === row2) {
+                // Same row
+                return keySquare[(row1 * 5) + ((col1 - 1 + 5) % 5)] + 
+                       keySquare[(row2 * 5) + ((col2 - 1 + 5) % 5)];
+            } else if (col1 === col2) {
+                // Same column
+                return keySquare[((row1 - 1 + 5) % 5) * 5 + col1] + 
+                       keySquare[((row2 - 1 + 5) % 5) * 5 + col2];
+            } else {
+                // Rectangle
+                return keySquare[row1 * 5 + col2] + keySquare[row2 * 5 + col1];
+            }
+        }
+        
+        function railFenceCipher(text, rails) {
+            if (rails === 1) return text;
+            const fence = Array(rails).fill().map(() => []);
+            let rail = 0;
+            let direction = 1;
+            
+            for (let i = 0; i < text.length; i++) {
+                fence[rail].push(text[i]);
+                rail += direction;
+                if (rail === rails - 1 || rail === 0) {
+                    direction = -direction;
+                }
+            }
+            
+            return fence.map(row => row.join('')).join('');
+        }
+        
+        function railFenceDecipher(cipher, rails) {
+            if (rails === 1) return cipher;
+            const fence = Array(rails).fill().map(() => []);
+            const positions = [];
+            let rail = 0;
+            let direction = 1;
+            
+            // Mark positions on the fence
+            for (let i = 0; i < cipher.length; i++) {
+                positions.push(rail);
+                rail += direction;
+                if (rail === rails - 1 || rail === 0) {
+                    direction = -direction;
+                }
+            }
+            
+            // Count characters per rail
+            const railLengths = Array(rails).fill(0);
+            positions.forEach(pos => railLengths[pos]++);
+            
+            // Fill the fence with cipher characters
+            let index = 0;
+            for (let r = 0; r < rails; r++) {
+                for (let i = 0; i < railLengths[r]; i++) {
+                    fence[r].push(cipher[index++]);
+                }
+            }
+            
+            // Read the message
+            let result = '';
+            const railIndices = Array(rails).fill(0);
+            for (const pos of positions) {
+                result += fence[pos][railIndices[pos]++];
+            }
+            
+            return result;
+        }
+        
+        // Advanced tools
+        function analyzeFrequency() {
+            const text = document.getElementById('outputText').value.toUpperCase();
+            if (!text) {
+                showNotification('Please enter some text to analyze!', 'error');
+                return;
+            }
+            
+            const frequency = {};
+            const totalChars = text.replace(/[^A-Z]/g, '').length;
+            
+            for (const char of text) {
+                if (char.match(/[A-Z]/)) {
+                    frequency[char] = (frequency[char] || 0) + 1;
+                }
+            }
+            
+            const sorted = Object.entries(frequency)
+                .sort(([,a], [,b]) => b - a)
+                .map(([char, count]) => `${char}: ${count} (${(count/totalChars*100).toFixed(1)}%)`)
+                .join('<br>');
+            
+            showModal('📊 Frequency Analysis', 
+                `<div style="text-align: left; font-family: monospace;">
+                    <strong>Total characters analyzed: ${totalChars}</strong><br><br>
+                    ${sorted}
+                </div>`);
+        }
+        
+        function bruteForce() {
+            const text = document.getElementById('outputText').value;
+            if (!text) {
+                showNotification('Please enter some text to brute force!', 'error');
+                return;
+            }
+            
+            let results = '<div style="max-height: 400px; overflow-y: auto;">';
+            
+            // Try all Caesar cipher shifts
+            for (let shift = 1; shift <= 25; shift++) {
+                const decoded = caesarCipher(text, -shift);
+                results += `<div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 5px;">
+                    <strong>Shift ${shift}:</strong><br>
+                    <span style="font-family: monospace;">${decoded}</span>
+                </div>`;
+            }
+            
+            results += '</div>';
+            showModal('🔨 Brute Force Results', results);
+        }
+        
+        function generateKey() {
+            const types = ['alphabetic', 'numeric', 'alphanumeric', 'special'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            let chars = '';
+            
+            switch (type) {
+                case 'alphabetic':
+                    chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+                    break;
+                case 'numeric':
+                    chars = '0123456789';
+                    break;
+                case 'alphanumeric':
+                    chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                    break;
+                case 'special':
+                    chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
+                    break;
+            }
+            
+            const length = Math.floor(Math.random() * 20) + 8; // 8-28 characters
+            let key = '';
+            
+            for (let i = 0; i < length; i++) {
+                key += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            document.getElementById('keyValue').value = key;
+            document.getElementById('decodeKey').value = key;
+            
+            showNotification(`Generated ${type} key: ${key}`, 'success');
+        }
+        
+        function textAnalyzer() {
+            const text = document.getElementById('inputText').value || document.getElementById('outputText').value;
+            if (!text) {
+                showNotification('Please enter some text to analyze!', 'error');
+                return;
+            }
+            
+            const stats = {
+                characters: text.length,
+                letters: (text.match(/[a-zA-Z]/g) || []).length,
+                digits: (text.match(/\d/g) || []).length,
+                spaces: (text.match(/\s/g) || []).length,
+                punctuation: (text.match(/[^\w\s]/g) || []).length,
+                words: text.trim().split(/\s+/).length,
+                sentences: (text.match(/[.!?]+/g) || []).length,
+                uppercase: (text.match(/[A-Z]/g) || []).length,
+                lowercase: (text.match(/[a-z]/g) || []).length
+            };
+            
+            const entropy = calculateEntropy(text);
+            const readability = calculateReadability(text);
+            
+            showModal('🔬 Text Analysis', 
+                `<div style="text-align: left;">
+                    <h3>📈 Statistics</h3>
+                    <p><strong>Total Characters:</strong> ${stats.characters}</p>
+                    <p><strong>Letters:</strong> ${stats.letters}</p>
+                    <p><strong>Digits:</strong> ${stats.digits}</p>
+                    <p><strong>Spaces:</strong> ${stats.spaces}</p>
+                    <p><strong>Punctuation:</strong> ${stats.punctuation}</p>
+                    <p><strong>Words:</strong> ${stats.words}</p>
+                    <p><strong>Sentences:</strong> ${stats.sentences}</p>
+                    <p><strong>Uppercase:</strong> ${stats.uppercase}</p>
+                    <p><strong>Lowercase:</strong> ${stats.lowercase}</p>
+                    <br>
+                    <h3>🧮 Advanced Metrics</h3>
+                    <p><strong>Entropy:</strong> ${entropy.toFixed(3)} bits</p>
+                    <p><strong>Readability Score:</strong> ${readability.toFixed(1)}</p>
+                    <p><strong>Average Word Length:</strong> ${(stats.letters / stats.words).toFixed(1)}</p>
+                </div>`);
+        }
+        
+        function calculateEntropy(text) {
+            const frequency = {};
+            for (const char of text) {
+                frequency[char] = (frequency[char] || 0) + 1;
+            }
+            
+            let entropy = 0;
+            const length = text.length;
+            
+            for (const count of Object.values(frequency)) {
+                const probability = count / length;
+                entropy -= probability * Math.log2(probability);
+            }
+            
+            return entropy;
+        }
+        
+        function calculateReadability(text) {
+            const words = text.trim().split(/\s+/).length;
+            const sentences = (text.match(/[.!?]+/g) || []).length;
+            const syllables = text.toLowerCase().match(/[aeiouy]+/g)?.length || 1;
+            
+            // Simplified Flesch Reading Ease
+            return 206.835 - (1.015 * (words / sentences)) - (84.6 * (syllables / words));
+        }
+        
+        function hashGenerator() {
+            const text = document.getElementById('inputText').value || document.getElementById('outputText').value;
+            if (!text) {
+                showNotification('Please enter some text to hash!', 'error');
+                return;
+            }
+            
+            // Simple hash implementations (not cryptographically secure)
+            const md5Hash = simpleMD5(text);
+            const sha1Hash = simpleSHA1(text);
+            const customHash = customHashFunction(text);
+            
+            showModal('🏷️ Hash Generator', 
+                `<div style="text-align: left; font-family: monospace; word-break: break-all;">
+                    <h3>Input Text:</h3>
+                    <p style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 5px; max-height: 100px; overflow-y: auto;">${text}</p>
+                    <br>
+                    <h3>Generated Hashes:</h3>
+                    <p><strong>Custom Hash:</strong><br>${customHash}</p>
+                    <p><strong>Simple MD5-like:</strong><br>${md5Hash}</p>
+                    <p><strong>Simple SHA1-like:</strong><br>${sha1Hash}</p>
+                    <br>
+                    <small style="color: #ffff00;">⚠️ These are simplified implementations for educational purposes only.</small>
+                </div>`);
+        }
+        
+        function simpleMD5(text) {
+            let hash = 0;
+            for (let i = 0; i < text.length; i++) {
+                const char = text.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32-bit integer
+            }
+            return Math.abs(hash).toString(16).padStart(8, '0').repeat(4).substring(0, 32);
+        }
+        
+        function simpleSHA1(text) {
+            let hash = 0;
+            for (let i = 0; i < text.length; i++) {
+                const char = text.charCodeAt(i);
+                hash = ((hash << 7) - hash) + char;
+                hash = hash & hash;
+            }
+            return Math.abs(hash).toString(16).padStart(8, '0').repeat(5).substring(0, 40);
+        }
+        
+        function customHashFunction(text) {
+            let hash = 5381;
+            for (let i = 0; i < text.length; i++) {
+                hash = ((hash << 5) + hash) + text.charCodeAt(i);
+            }
+            return Math.abs(hash).toString(16).padStart(8, '0');
+        }
+        
+        function steganography() {
+            showModal('🖼️ Steganography Tools', 
+                `<div style="text-align: left;">
+                    <h3>Hide Text in Whitespace</h3>
+                    <textarea id="stegoInput" placeholder="Enter text to hide..." style="width: 100%; height: 80px; margin: 10px 0; background: rgba(0,0,0,0.3); border: 1px solid #00ffff; border-radius: 5px; color: white; padding: 10px;"></textarea>
+                    <button class="btn" onclick="hideInWhitespace()" style="margin: 5px;">Hide Text</button>
+                    <button class="btn" onclick="extractFromWhitespace()" style="margin: 5px;">Extract Text</button>
+                    <br><br>
+                    <h3>Zero-Width Character Encoding</h3>
+                    <button class="btn" onclick="zeroWidthEncode()" style="margin: 5px;">Encode with Zero-Width</button>
+                    <button class="btn" onclick="zeroWidthDecode()" style="margin: 5px;">Decode Zero-Width</button>
+                    <br><br>
+                    <div id="stegoResult" style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 5px; min-height: 50px; margin-top: 10px;"></div>
+                </div>`);
+        }
+        
+        function hideInWhitespace() {
+            const text = document.getElementById('stegoInput').value;
+            if (!text) return;
+            
+            let binary = '';
+            for (let i = 0; i < text.length; i++) {
+                binary += text.charCodeAt(i).toString(2).padStart(8, '0');
+            }
+            
+            let hidden = '';
+            for (const bit of binary) {
+                hidden += bit === '1' ? '\u00A0' : '\u0020'; // Non-breaking space vs regular space
+            }
+            
+            document.getElementById('stegoResult').innerHTML = 
+                `<strong>Hidden text (copy this):</strong><br>
+                <textarea readonly style="width: 100%; height: 60px; background: rgba(0,0,0,0.5); color: white; border: 1px solid #00ffff; padding: 5px;">${hidden}</textarea>`;
+        }
+        
+        function extractFromWhitespace() {
+            const hidden = document.getElementById('stegoInput').value;
+            if (!hidden) return;
+            
+            let binary = '';
+            for (let i = 0; i < hidden.length; i++) {
+                const char = hidden.charCodeAt(i);
+                binary += char === 160 ? '1' : '0'; // Non-breaking space = 1, regular space = 0
+            }
+            
+            let text = '';
+            for (let i = 0; i < binary.length; i += 8) {
+                const byte = binary.substr(i, 8);
+                if (byte.length === 8) {
+                    text += String.fromCharCode(parseInt(byte, 2));
+                }
+            }
+            
+            document.getElementById('stegoResult').innerHTML = 
+                `<strong>Extracted text:</strong><br>
+                <div style="background: rgba(0,255,0,0.1); padding: 10px; border-radius: 5px;">${text}</div>`;
+        }
+        
+        function zeroWidthEncode() {
+            const text = document.getElementById('stegoInput').value;
+            if (!text) return;
+            
+            let encoded = '';
+            for (let i = 0; i < text.length; i++) {
+                const binary = text.charCodeAt(i).toString(2).padStart(8, '0');
+                for (const bit of binary) {
+                    encoded += bit === '1' ? '\u200B' : '\u200C'; // Zero-width space vs zero-width non-joiner
+                }
+            }
+            
+            document.getElementById('stegoResult').innerHTML = 
+                `<strong>Zero-width encoded (invisible characters):</strong><br>
+                <textarea readonly style="width: 100%; height: 60px; background: rgba(0,0,0,0.5); color: white; border: 1px solid #00ffff; padding: 5px;">${encoded}</textarea>`;
+        }
+        
+        function zeroWidthDecode() {
+            const encoded = document.getElementById('stegoInput').value;
+            if (!encoded) return;
+            
+            let binary = '';
+            for (let i = 0; i < encoded.length; i++) {
+                const char = encoded.charCodeAt(i);
+                if (char === 8203) binary += '1'; // Zero-width space
+                else if (char === 8204) binary += '0'; // Zero-width non-joiner
+            }
+            
+            let text = '';
+            for (let i = 0; i < binary.length; i += 8) {
+                const byte = binary.substr(i, 8);
+                if (byte.length === 8) {
+                    text += String.fromCharCode(parseInt(byte, 2));
+                }
+            }
+            
+            document.getElementById('stegoResult').innerHTML = 
+                `<strong>Decoded text:</strong><br>
+                <div style="background: rgba(0,255,0,0.1); padding: 10px; border-radius: 5px;">${text}</div>`;
+        }
+        
+        // Challenge system
+        const challenges = [
+            {
+                type: 'caesar',
+                message: 'WKLV LV D VHFUHW PHVVDJH',
+                shift: 3,
+                answer: 'THIS IS A SECRET MESSAGE',
+                hint: 'This is a classic Caesar cipher with a shift of 3.'
+            },
+            {
+                type: 'base64',
+                message: 'SGVsbG8gV29ybGQh',
+                answer: 'Hello World!',
+                hint: 'This looks like Base64 encoding.'
+            },
+            {
+                type: 'morse',
+                message: '.... . .-.. .-.. --- / .-- --- .-. .-.. -..',
+                answer: 'HELLO WORLD',
+                hint: 'Dots and dashes... what could this be?'
+            },
+            {
+                type: 'binary',
+                message: '01001000 01100101 01101100 01101100 01101111',
+                answer: 'Hello',
+                hint: 'Everything is 1s and 0s in the digital world.'
+            },
+            {
+                type: 'atbash',
+                message: 'SVOOL DLIOW',
+                answer: 'HELLO WORLD',
+                hint: 'This is the Atbash cipher - A becomes Z, B becomes Y, etc.'
+            },
+            {
+                type: 'hex',
+                message: '48 65 6c 6c 6f 20 57 6f 72 6c 64',
+                answer: 'Hello World',
+                hint: 'These look like hexadecimal values.'
+            },
+            {
+                type: 'vigenere',
+                message: 'RIJVS UYVJN',
+                key: 'KEY',
+                answer: 'HELLO WORLD',
+                hint: 'This uses a repeating key cipher. The key is "KEY".'
+            }
+        ];
+        
+        function newChallenge() {
+            const challenge = challenges[Math.floor(Math.random() * challenges.length)];
+            gameState.currentChallenge = challenge;
+            gameState.hintsUsed = 0;
+            
+            document.getElementById('challengeText').textContent = challenge.message;
+            document.getElementById('challengeProgress').style.width = '0%';
+            
+            // Hide all hints
+            document.querySelectorAll('.hint').forEach(hint => {
+                hint.classList.remove('active');
+            });
+            
+            showNotification('New challenge loaded! Decode the message.', 'info');
+        }
+        
+        function submitChallenge() {
+            if (!gameState.currentChallenge) {
+                showNotification('No active challenge! Click "New Challenge" first.', 'error');
+                return;
+            }
+            
+            const userAnswer = document.getElementById('outputText').value.trim().toUpperCase();
+            const correctAnswer = gameState.currentChallenge.answer.toUpperCase();
+            
+            gameState.totalAttempts++;
+            
+            if (userAnswer === correctAnswer) {
+                gameState.correctAttempts++;
+                gameState.streak++;
+                
+                const baseScore = 100;
+                const hintPenalty = gameState.hintsUsed * 10;
+                const streakBonus = gameState.streak * 5;
+                const finalScore = Math.max(baseScore - hintPenalty + streakBonus, 10);
+                
+                updateScore(finalScore);
+                updateLevel();
+                
+                document.getElementById('challengeProgress').style.width = '100%';
+                showNotification(`🎉 Correct! +${finalScore} points! Streak: ${gameState.streak}`, 'success');
+                
+                // Auto-generate new challenge after success
+                setTimeout(newChallenge, 2000);
+                
+            } else {
+                gameState.streak = 0;
+                showNotification('❌ Incorrect. Try again or use a hint!', 'error');
+            }
+            
+            updateStats();
+        }
+        
+        function getHint() {
+            if (!gameState.currentChallenge) {
+                showNotification('No active challenge!', 'error');
+                return;
+            }
+            
+            gameState.hintsUsed++;
+            const hintElement = document.getElementById(`hint${Math.min(gameState.hintsUsed, 3)}`);
+            
+            if (hintElement) {
+                hintElement.classList.add('active');
+                
+                if (gameState.hintsUsed === 1) {
+                    hintElement.textContent = `💭 ${gameState.currentChallenge.hint}`;
+                } else if (gameState.hintsUsed === 2) {
+                    hintElement.textContent = `🔍 Method: ${gameState.currentChallenge.type.toUpperCase()}`;
+                } else if (gameState.hintsUsed === 3) {
+                    hintElement.textContent = `🎯 First word: ${gameState.currentChallenge.answer.split(' ')[0]}`;
+                }
+                
+                const progress = Math.min((gameState.hintsUsed / 3) * 50, 50);
+                document.getElementById('challengeProgress').style.width = progress + '%';
+                
+                showNotification(`Hint ${gameState.hintsUsed} revealed! (-10 points penalty)`, 'info');
+            }
+        }
+        
+        // Game mechanics
+        function updateScore(points) {
+            gameState.score += points;
+            document.getElementById('scoreValue').textContent = gameState.score;
+            animateScoreIncrease(points);
+        }
+        
+        function updateLevel() {
+            const newLevel = Math.floor(gameState.score / 500) + 1;
+            if (newLevel > gameState.level) {
+                gameState.level = newLevel;
+                showNotification(`🆙 Level Up! Welcome to Level ${gameState.level}!`, 'success');
+                updateLevelDisplay();
+            }
+        }
+        
+        function updateLevelDisplay() {
+            const levels = [
+                'NOVICE', 'APPRENTICE', 'ADEPT', 'EXPERT', 'MASTER', 
+                'GRANDMASTER', 'LEGENDARY', 'MYTHICAL', 'GODLIKE', 'TRANSCENDENT'
+            ];
+            const levelName = levels[Math.min(gameState.level - 1, levels.length - 1)];
+            document.getElementById('levelDisplay').textContent = `LEVEL: ${gameState.level} - ${levelName}`;
+        }
+        
+        function updateStats() {
+            document.getElementById('scoreValue').textContent = gameState.score;
+            document.getElementById('levelValue').textContent = gameState.level;
+            document.getElementById('streakValue').textContent = gameState.streak;
+            
+            const accuracy = gameState.totalAttempts > 0 ? 
+                Math.round((gameState.correctAttempts / gameState.totalAttempts) * 100) : 100;
+            document.getElementById('accuracyValue').textContent = accuracy + '%';
+            
+            saveGameState();
+        }
+        
+        function animateScoreIncrease(points) {
+            const scoreElement = document.getElementById('scoreValue');
+            const originalText = scoreElement.textContent;
+            
+            scoreElement.style.transform = 'scale(1.2)';
+            scoreElement.style.color = '#00ff00';
+            scoreElement.textContent = `+${points}`;
+            
+            setTimeout(() => {
+                scoreElement.style.transform = 'scale(1)';
+                scoreElement.style.color = '#00ffff';
+                scoreElement.textContent = gameState.score;
+            }, 500);
+        }
+        
+        // Utility functions
+        function clearInput() {
+            document.getElementById('inputText').value = '';
+        }
+        
+        function clearOutput() {
+            document.getElementById('outputText').value = '';
+        }
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification show ${type}`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        function showModal(title, content) {
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modalContent');
+            
+            modalContent.innerHTML = `
+                <h2 style="color: #00ffff; margin-bottom: 20px;">${title}</h2>
+                ${content}
+            `;
+            
+            modal.style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+        
+        // Easter egg
+        function activateEasterEgg() {
+            const messages = [
+                'You found the secret! +50 points!',
+                'Easter egg activated! Bonus unlocked!',
+                'Secret agent mode: ACTIVATED!',
+                'Hidden feature discovered!',
+                'You are now a certified cipher detective!'
+            ];
+            
+            const message = messages[Math.floor(Math.random() * messages.length)];
+            updateScore(50);
+            showNotification(message, 'success');
+            
+            // Add special effect
+            document.body.style.animation = 'backgroundShift 1s ease-in-out';
+            setTimeout(() => {
+                document.body.style.animation = '';
+            }, 1000);
+        }
+        
+        // Auto-save functionality
+        function saveGameState() {
+            const state = {
+                score: gameState.score,
+                level: gameState.level,
+                streak: gameState.streak,
+                totalAttempts: gameState.totalAttempts,
+                correctAttempts: gameState.correctAttempts,
+                timestamp: Date.now()
+            };
+            
+            try {
+                // Since localStorage is not available, we'll store in a global variable
+                window.cipherNexusState = state;
+            } catch (e) {
+                console.log('Auto-save not available in this environment');
+            }
+        }
+        
+        function loadSavedState() {
+            try {
+                const saved = window.cipherNexusState;
+                if (saved) {
+                    gameState.score = saved.score || 0;
+                    gameState.level = saved.level || 1;
+                    gameState.streak = saved.streak || 0;
+                    gameState.totalAttempts = saved.totalAttempts || 0;
+                    gameState.correctAttempts = saved.correctAttempts || 0;
+                    updateStats();
+                    updateLevelDisplay();
+                }
+            } catch (e) {
+                console.log('No saved state found');
+            }
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'e':
+                        e.preventDefault();
+                        encodeText();
+                        break;
+                    case 'd':
+                        e.preventDefault();
+                        decodeText();
+                        break;
+                    case 'n':
+                        e.preventDefault();
+                        newChallenge();
+                        break;
+                    case 'h':
+                        e.preventDefault();
+                        getHint();
+                        break;
+                }
+            }
+        });
+        
+        // Method synchronization
+        document.getElementById('encodeMethod').addEventListener('change', function() {
+            document.getElementById('decodeMethod').value = this.value;
+        });
+        
+        document.getElementById('decodeMethod').addEventListener('change', function() {
+            document.getElementById('encodeMethod').value = this.value;
+        });
+        
+        document.getElementById('shiftValue').addEventListener('input', function() {
+            document.getElementById('decodeShift').value = this.value;
+        });
+        
+        document.getElementById('decodeShift').addEventListener('input', function() {
+            document.getElementById('shiftValue').value = this.value;
+        });
+        
+        document.getElementById('keyValue').addEventListener('input', function() {
+            document.getElementById('decodeKey').value = this.value;
+        });
+        
+        document.getElementById('decodeKey').addEventListener('input', function() {
+            document.getElementById('keyValue').value = this.value;
+        });
+        
+        // Click outside modal to close
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        
+        // Initialize with first challenge
+        setTimeout(() => {
+            newChallenge();
+            showNotification('Welcome to Cipher Nexus! Try the challenge mode or explore the encoding tools.', 'info');
+        }, 1000);
+        
+        // Performance monitoring
+        let frameCount = 0;
+        let lastTime = performance.now();
+        
+        function updatePerformance() {
+            frameCount++;
+            const currentTime = performance.now();
+            
+            if (currentTime - lastTime >= 1000) {
+                const fps = Math.round(frameCount * 1000 / (currentTime - lastTime));
+                
+                // Adjust particle count based on performance
+                if (fps < 30) {
+                    const particles = document.querySelectorAll('.particle');
+                    if (particles.length > 25) {
+                        for (let i = 25; i < particles.length; i++) {
+                            particles[i].remove();
+                        }
+                    }
+                }
+                
+                frameCount = 0;
+                lastTime = currentTime;
+            }
+            
+            requestAnimationFrame(updatePerformance);
+        }
+        
+        requestAnimationFrame(updatePerformance);
+        
+        // Add some advanced features on window load
+        window.addEventListener('load', function() {
+            // Preload some challenges
+            setTimeout(() => {
+                if (gameState.score === 0) {
+                    showNotification('💡 Pro tip: Use Ctrl+E to encode, Ctrl+D to decode, Ctrl+N for new challenge!', 'info');
+                }
+            }, 5000);
+            
+            // Add dynamic difficulty
+            setInterval(() => {
+                if (gameState.streak >= 5 && Math.random() < 0.3) {
+                    const bonusPoints = gameState.streak * 2;
+                    updateScore(bonusPoints);
+                    showNotification(`🔥 Hot streak bonus! +${bonusPoints} points!`, 'success');
+                }
+            }, 30000);
+        });
+        
+        console.log('🔐 Cipher Nexus loaded successfully!');
+        console.log('🎮 Game features: 10+ encoding methods, challenge mode, frequency analysis, brute force, and more!');
+        console.log('⌨️ Shortcuts: Ctrl+E (encode), Ctrl+D (decode), Ctrl+N (new challenge), Ctrl+H (hint)');
+    </script>
 </body>
 </html>
