@@ -1,58 +1,75 @@
-# Crypto  Master
-![landing_page](https://github.com/pragsrv/Text-Encoder-Decoder/blob/63c3d508246e2c72014b5cb6203456e8ba7bd37e/output.gif?raw=true)
+# 🔐 Cipher Nexus - Advanced Cryptography Game
 
----
-> The hover effect on the containers is made using AI(CoPilot)
-
-> The dark mode color settings were done using AI(Claude AI)
-
-> This readme is generated using AI(ChatGPT)
----
-## Overview
-The Text Encrypter-Decrypter is a web-based application that allows users to encrypt and decrypt messages using various encryption methods. The application features a user-friendly interface and supports multiple encryption algorithms, including Caesar Cipher, Base64, and ROT13.
-
-## Features
-
-- **Theme Toggle**: Switch between light and dark themes for better visibility.
-![image](https://github.com/user-attachments/assets/f8238fb0-3fe6-4b31-869a-8fc721766c90)
-![image](https://github.com/user-attachments/assets/1d0565bd-18fd-47d9-b2da-d0b5781bbdcf)
-
-- **Encryption Methods**: Choose from Caesar Cipher, Base64, or ROT13 for encrypting your messages.
-- **Decryption**: Easily decrypt messages using the same methods.
-- **Character Counter**: Keep track of the number of characters in your input.
-  
-![image](https://github.com/user-attachments/assets/d84313e4-67ea-4554-8c88-a0c7d201f927)
+**Cipher Nexus** is a premium cryptography game that combines advanced encoding techniques with stunning visual effects and gamified learning. Master encryption through interactive challenges and professional-grade tools.
+> Claude AI was used to highly upgrade this project and add more features to it.
 
 
-- **History Tracking**: View recent encryption and decryption activities.
-- **Copy to Clipboard**: Quickly copy the encrypted or decrypted text to your clipboard.
-![image](https://github.com/user-attachments/assets/9f36e056-2739-4bdf-9336-49a209e7eb99)
+![ScreenRecording2025-08-03142656-ezgif com-optimize](https://github.com/user-attachments/assets/7c9af910-4eab-460e-ad68-ed9a0c0f8a88)
 
 
-## Getting Started
+## ✨ Features
 
-### Prerequisites
-- A modern web browser (Chrome, Firefox, Safari, etc.)
+### 🔒 **Cryptography Methods**
+Base64, Caesar Cipher, ROT13, Binary, Hexadecimal, Morse Code, Atbash, Vigenère, Playfair, Rail Fence Cipher
 
-### Installation
+### 🛠️ **Advanced Tools**
+- **Frequency Analysis** - Character pattern analysis
+- **Brute Force Attack** - Automated cipher breaking
+- **Key Generator** - Secure random key creation
+- **Text Analyzer** - Deep linguistic analysis with entropy calculation
+- **Hash Generator** - MD5, SHA1, and custom hash implementations
+- **Steganography** - Hide messages in whitespace and zero-width characters
+
+### 🎮 **Game Features**
+- **Challenge Mode** - Progressive difficulty puzzles
+- **10-Tier Leveling** - Novice to Transcendent progression
+- **Scoring System** - Points, streaks, and accuracy tracking
+- **Hint System** - Multi-level clues with strategic penalties
+
+### 🎨 **Visual Excellence**
+- **Glassmorphism UI** - Modern frosted glass effects
+- **Matrix Rain Animation** - Dynamic falling characters
+- **Floating Particles** - Ambient particle system
+- **Neon Effects** - Animated borders and glow
+- **Responsive Design** - Works on all devices
+
+### ⚡ **Interactive Features**
+- **Keyboard Shortcuts** - `Ctrl+E` (encode), `Ctrl+D` (decode), `Ctrl+N` (challenge)
+- **Real-time Sync** - Auto-sync between encoder/decoder
+- **Performance Optimization** - Adaptive quality based on device
+
+## 🚀 Quick Start
+
 1. Clone the repository:
    ```bash
-   git clone https://github.com/pragsrv/Text-Encrypter-Decrypter.git
+   git clone https://github.com/pragsrv/Cipher-Nexus.git
    ```
-2. Open `index.html` in your web browser.
 
-## Usage
-1. Enter your secret message in the input textarea.
-2. Select the desired encryption method from the dropdown menu.
-3. Adjust the shift value (if applicable) using the slider.
-4. Click the "Encrypt" button to encrypt your message or the "Decrypt" button to decrypt it.
-5. The result will appear in the output textarea, and you can copy it using the "Copy" button.
+2. Open `index.html` in your browser - no installation required!
 
-## Contributing
-Contributions are welcome! If you have suggestions for improvements or new features, please open an issue or submit a pull request.
+## 🎯 How to Play
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+1. **Basic Mode**: Enter text, select cipher method, encode/decode
+2. **Challenge Mode**: Solve randomized cryptographic puzzles
+3. **Advanced Tools**: Use frequency analysis and brute force for complex ciphers
 
-## Acknowledgments
-- Inspired by various encryption techniques and web development tutorials.
+## 🏆 Scoring
+
+- Encoding/Decoding: 10-15 points
+- Challenge Success: 100 points base
+- Streak Bonus: +5 points per consecutive win
+- Hint Penalty: -10 points per hint
+
+## 🔧 Technical
+
+- **Pure HTML/CSS/JavaScript** - No dependencies
+- **Single File** - ~50KB total size
+- **Cross-browser Compatible** - Works on all major browsers
+- **Performance Optimized** - 60fps with automatic degradation
+
+## 📝 License
+
+MIT License 
+---
+
+**Cipher Nexus - Where cryptography meets gaming excellence** 🎮✨
